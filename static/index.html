@@ -66,11 +66,17 @@
 </head>
 <body>
 
-  <h2>Type the following sentence:</h2>
-  <p id="targetSentence" style="font-style: italic;"></p>
+  <h2 id="instruction">Type the following sentence:</h2>
 
+  <!-- Language Selector -->
+  <select id="language" onchange="changeLanguage()">
+    <option value="en">English</option>
+    <option value="th">ภาษาไทย</option>
+  </select>
+
+  <p id="targetSentence" style="font-style: italic;"></p>
   <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
-  <button onclick="submitData()">Analyze</button>
+  <button onclick="submitData()" id="analyzeBtn">Analyze</button>
   <p id="output"></p>
 
   <script src="/static/script.js"></script>
