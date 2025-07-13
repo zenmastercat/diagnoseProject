@@ -33,6 +33,11 @@ def predict():
         return jsonify({ "result": "⚠️ Slight deviation detected. Consider retesting." })
     else:
         return jsonify({ "result": "⚠️ Possible Parkinson's Risk" })
+        
+return jsonify({
+    "result": "✅ Normal Typing Pattern",
+    "rmse": round(rmse, 2)
+})
 
 
 if __name__ == "__main__":
