@@ -15,6 +15,7 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
+    print("Received data:", data)
     features = np.array(data["features"]).reshape(1, -1)
 
     if features.shape[1] < 30:
