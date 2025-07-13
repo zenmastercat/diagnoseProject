@@ -1,5 +1,20 @@
+let timings = [];
+let lastTime = null;
+
+const textarea = document.getElementById("typingArea");
+textarea.addEventListener("keydown", (event) => {
+    const currentTime = performance.now();
+    if (lastTime !== null) {
+        timings.push(currentTime - lastTime);
+    }
+    lastTime = currentTime;
+});
+
 function submitData() {
-    console.log("Sending timings:", timings);
+    if (timings.length < 5) {
+        alert("⚠️ Please type the full sentence before analyzing.");
+        return;
+    }
 
     fetch("/predict", {
         method: "POST",
@@ -8,13 +23,22 @@ function submitData() {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("Response from server:", data);
-        document.getElementById("output").innerText = data.result;
+        const output = document.getElementById("output");
+        output.innerText = data.result;
+
+        if (data.result.includes("Risk")) {
+            output.style.color = "red";
+            alert("⚠️ AI Prediction: You may be at risk. Please consult a neurologist.");
+        } else {
+            output.style.color = "green";
+        }
+
+        // Reset for next try
         timings = [];
         lastTime = null;
     })
     .catch(err => {
-        console.error("Error sending data:", err);
-        alert("Something went wrong. Check console.");
+        console.error("Error:", err);
+        alert("Something went wrong. Please try again.");
     });
 }
