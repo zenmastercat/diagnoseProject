@@ -1,7 +1,18 @@
+let sentences = [
+    "The quick brown fox jumps over the lazy dog.",
+    "She sells seashells by the seashore.",
+    "Typing speed and accuracy can reveal health.",
+    "A watched pot never boils.",
+    "Early detection saves lives."
+];
+
+let target = sentences[Math.floor(Math.random() * sentences.length)];
+document.getElementById("targetSentence").innerText = target;
+
 let timings = [];
 let lastTime = null;
-
 const textarea = document.getElementById("typingArea");
+
 textarea.addEventListener("keydown", (event) => {
     const currentTime = performance.now();
     if (lastTime !== null) {
@@ -11,6 +22,12 @@ textarea.addEventListener("keydown", (event) => {
 });
 
 function submitData() {
+    const typed = textarea.value.trim();
+    if (typed !== target.trim()) {
+        alert("❌ Your typed sentence doesn't match the prompt exactly.\nPlease try again.");
+        return;
+    }
+
     if (timings.length < 5) {
         alert("⚠️ Please type the full sentence before analyzing.");
         return;
@@ -33,9 +50,12 @@ function submitData() {
             output.style.color = "green";
         }
 
-        // Reset for next try
+        // Reset
         timings = [];
         lastTime = null;
+        textarea.value = "";
+        target = sentences[Math.floor(Math.random() * sentences.length)];
+        document.getElementById("targetSentence").innerText = target;
     })
     .catch(err => {
         console.error("Error:", err);
