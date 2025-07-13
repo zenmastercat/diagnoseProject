@@ -50,15 +50,26 @@ function submitData() {
     })
     .then(res => res.json())
     .then(data => {
-        const output = document.getElementById("output");
-        output.innerText = data.result;
+    const output = document.getElementById("output");
+    output.innerText = `${data.result} (RMSE: ${data.rmse})`;
 
-        if (data.result.includes("Risk")) {
-            output.style.color = "red";
-            alert("⚠️ AI Prediction: You may be at risk. Please consult a neurologist.");
-        } else {
-            output.style.color = "green";
-        }
+    if (data.result.includes("Risk")) {
+        output.style.color = "red";
+        alert("⚠️ AI Prediction: You may be at risk. Please consult a neurologist.");
+    } else if (data.result.includes("deviation")) {
+        output.style.color = "orange";
+    } else {
+        output.style.color = "green";
+    }
+
+    // Reset for next round
+    timings = [];
+    lastTime = null;
+    textarea.value = "";
+    currentData = sentenceData[Math.floor(Math.random() * sentenceData.length)];
+    document.getElementById("targetSentence").innerText = currentData.sentence;
+})
+
 
         // Reset for next sentence
         timings = [];
