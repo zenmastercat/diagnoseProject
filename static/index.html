@@ -2,13 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Parkinson's Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 1.2em;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 1rem;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        max-width: 600px;
+        margin: auto;
+      }
+
+      button {
+        width: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h2>Type this sentence: "the quick brown fox jumps over the lazy dog"</h2>
-  <textarea id="typingArea" rows="4" cols="50"></textarea><br>
+
+  <h2>Please type this sentence:</h2>
+  <p><i>"The quick brown fox jumps over the lazy dog."</i></p>
+  <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
   <button onclick="submitData()">Analyze</button>
-  <p id="output" style="font-size: 20px; font-weight: bold;"></p>
+  <p id="output"></p>
 
   <script src="/static/script.js"></script>
 </body>
