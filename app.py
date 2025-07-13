@@ -26,14 +26,9 @@ def predict():
     rmse = np.sqrt(np.mean((features - baseline) ** 2))
     print("RMSE:", rmse)
 
-    if rmse < 15:
+    if rmse < 450:
         return jsonify({
             "result": "✅ Normal Typing Pattern",
-            "rmse": round(rmse, 2)
-        })
-    elif rmse < 25:
-        return jsonify({
-            "result": "⚠️ Slight deviation detected. Consider retesting.",
             "rmse": round(rmse, 2)
         })
     else:
