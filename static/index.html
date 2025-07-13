@@ -13,8 +13,8 @@
       color: #333;
     }
 
-    h2 {
-      font-size: 1.2em;
+    h2, p {
+      font-size: 1.1em;
     }
 
     textarea {
@@ -66,8 +66,9 @@
 </head>
 <body>
 
-  <h2>Please type this sentence:</h2>
-  <p><i>"The quick brown fox jumps over the lazy dog."</i></p>
+  <h2>Type the following sentence:</h2>
+  <p id="targetSentence" style="font-style: italic;"></p>
+
   <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
   <button onclick="submitData()">Analyze</button>
   <p id="output"></p>
