@@ -24,20 +24,24 @@ def predict():
     baseline = fix_length(baseline)
 
     rmse = np.sqrt(np.mean((features - baseline) ** 2))
-    print(f"RMSE: {rmse:.2f}")
+    print("RMSE:", rmse)
 
-    # Safer threshold: consider typing deviations in mobile, latency, etc.
     if rmse < 15:
-        return jsonify({ "result": "✅ Normal Typing Pattern" })
+        return jsonify({
+            "result": "✅ Normal Typing Pattern",
+            "rmse": round(rmse, 2)
+        })
     elif rmse < 25:
-        return jsonify({ "result": "⚠️ Slight deviation detected. Consider retesting." })
+        return jsonify({
+            "result": "⚠️ Slight deviation detected. Consider retesting.",
+            "rmse": round(rmse, 2)
+        })
     else:
-        return jsonify({ "result": "⚠️ Possible Parkinson's Risk" })
-        
-return jsonify({
-    "result": "✅ Normal Typing Pattern",
-    "rmse": round(rmse, 2)
-})
+        return jsonify({
+            "result": "⚠️ Possible Parkinson's Risk",
+            "rmse": round(rmse, 2)
+        })
+
 
 
 if __name__ == "__main__":
