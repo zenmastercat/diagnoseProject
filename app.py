@@ -7,8 +7,7 @@ app = Flask(__name__, static_folder='static')
 
 model = pickle.load(open("model.pkl", "rb"))
 
-if len(features[0]) == 0:
-    return jsonify({ "result": "Please type the sentence first." })
+
 
 
 
