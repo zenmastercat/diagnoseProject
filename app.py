@@ -1,15 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory
 import numpy as np
-import pickle
 import os
 
 app = Flask(__name__, static_folder='static')
-
-model = pickle.load(open("model.pkl", "rb"))
-
-
-
-
 
 @app.route("/")
 def index():
@@ -18,17 +11,25 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
-    print("Received data:", data)
-    features = np.array(data["features"]).reshape(1, -1)
+    features = np.array(data["features"])
+    baseline = np.array(data["baseline"])
 
-    if features.shape[1] < 30:
-        avg = np.mean(features)
-        features = np.pad(features, ((0, 0), (0, 30 - features.shape[1])), constant_values=avg)
-    elif features.shape[1] > 30:
-        features = features[:, :30]
+    def fix_length(arr):
+        if len(arr) < 30:
+            avg = np.mean(arr)
+            return np.pad(arr, (0, 30 - len(arr)), constant_values=avg)
+        return arr[:30]
 
-    result = model.predict(features)[0]
-    return jsonify({ "result": "Possible Parkinson's Risk" if result == 1 else "Normal" })
+    features = fix_length(features)
+    baseline = fix_length(baseline)
+
+    rmse = np.sqrt(np.mean((features - baseline) ** 2))
+    print("User RMSE:", rmse)
+
+    if rmse > 20:
+        return jsonify({ "result": "⚠️ Possible Parkinson's Risk" })
+    else:
+        return jsonify({ "result": "✅ Normal Typing Pattern" })
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
