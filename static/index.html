@@ -13,17 +13,24 @@
   </header>
 
   <main class="card">
-    <p class="instruction">
-      Please type the following sentence accurately and quickly:
-    </p>
-    <p id="prompt" class="prompt-box"></p>
+  <div class="lang-select">
+    <label for="language">🌐 Language / ภาษา:</label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="th">ภาษาไทย</option>
+    </select>
+  </div>
 
-    <textarea id="userInput" placeholder="Start typing here..."></textarea>
+  <p id="instruction" class="instruction">Type the following sentence:</p>
+  <p id="targetSentence" class="prompt-box"></p>
 
-    <button onclick="analyze()">Analyze</button>
+  <textarea id="typingArea" placeholder="Start typing here..."></textarea>
 
-    <div id="output" class="result-box"></div>
-  </main>
+  <button id="analyzeBtn" onclick="submitData()">Analyze</button>
+
+  <div id="output" class="result-box"></div>
+</main>
+
 
   <footer>
     <p>Developed as part of a Bioengineering Student Research Project (ISEF)</p>
