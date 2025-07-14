@@ -1,84 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Parkinson's Detection</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    h2, p {
-      font-size: 1.1em;
-    }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      font-size: 1rem;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      resize: none;
-      box-sizing: border-box;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      border: none;
-      background-color: #007BFF;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    #output {
-      margin-top: 20px;
-      padding: 10px;
-      font-weight: bold;
-      font-size: 1.1em;
-      text-align: center;
-    }
-
-    @media (min-width: 600px) {
-      body {
-        max-width: 600px;
-        margin: auto;
-      }
-
-      button {
-        width: auto;
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parkinson’s Typing Test</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <h1>🧠 Parkinson’s Risk Detection</h1>
+    <p>Clinical-Style Typing Behavior Analyzer</p>
+  </header>
 
-  <h2 id="instruction">Type the following sentence:</h2>
+  <main class="card">
+    <p class="instruction">
+      Please type the following sentence accurately and quickly:
+    </p>
+    <p id="prompt" class="prompt-box"></p>
 
-  <!-- Language Selector -->
-  <select id="language" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="th">ภาษาไทย</option>
-  </select>
+    <textarea id="userInput" placeholder="Start typing here..."></textarea>
 
-  <p id="targetSentence" style="font-style: italic;"></p>
-  <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
-  <button onclick="submitData()" id="analyzeBtn">Analyze</button>
-  <p id="output"></p>
+    <button onclick="analyze()">Analyze</button>
 
-  <script src="/static/script.js"></script>
+    <div id="output" class="result-box"></div>
+  </main>
+
+  <footer>
+    <p>Developed as part of a Bioengineering Student Research Project (ISEF)</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
