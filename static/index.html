@@ -1,31 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Parkinson's Detection</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-      background-color: #f4f4f4;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #eef4f8;
       color: #333;
+      margin: 0;
+      padding: 2rem 1rem;
     }
 
-    h2, p {
-      font-size: 1.1em;
+    .container {
+      max-width: 600px;
+      background: #ffffff;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 90, 120, 0.1);
+    }
+
+    h2 {
+      color: #005b96;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    select {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    #targetSentence {
+      font-style: italic;
+      padding: 0.8rem;
+      background: #f1f9ff;
+      border-left: 5px solid #0077cc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
     }
 
     textarea {
       width: 100%;
       height: 120px;
       font-size: 1rem;
-      padding: 10px;
+      padding: 1rem;
       border-radius: 8px;
       border: 1px solid #ccc;
       resize: none;
       box-sizing: border-box;
+      background: #fdfdfd;
     }
 
     button {
@@ -38,24 +67,25 @@
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
+      transition: background 0.2s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #005fa3;
     }
 
     #output {
       margin-top: 20px;
-      padding: 10px;
+      padding: 12px;
       font-weight: bold;
-      font-size: 1.1em;
+      font-size: 1.1rem;
       text-align: center;
+      border-radius: 8px;
     }
 
     @media (min-width: 600px) {
-      body {
-        max-width: 600px;
-        margin: auto;
+      .container {
+        padding: 2.5rem;
       }
 
       button {
@@ -65,20 +95,22 @@
   </style>
 </head>
 <body>
+  <div class="container">
+    <h2 id="instruction">Type the following sentence:</h2>
 
-  <h2 id="instruction">Type the following sentence:</h2>
+    <!-- Language Selector -->
+    <label for="language" style="font-weight: bold;">Language:</label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="th">ภาษาไทย</option>
+    </select>
 
-  <!-- Language Selector -->
-  <select id="language" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="th">ภาษาไทย</option>
-  </select>
+    <p id="targetSentence"></p>
 
-  <p id="targetSentence" style="font-style: italic;"></p>
-  <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
-  <button onclick="submitData()" id="analyzeBtn">Analyze</button>
-  <p id="output"></p>
- 
+    <textarea id="typingArea" placeholder="Start typing here..."></textarea><br />
+    <button onclick="submitData()" id="analyzeBtn">Analyze</button>
+    <p id="output"></p>
+  </div>
 
   <script src="/static/script.js"></script>
 </body>
