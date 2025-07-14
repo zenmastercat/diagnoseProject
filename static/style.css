@@ -1,0 +1,101 @@
+:root {
+  --primary: #005b96;
+  --secondary: #f0f7ff;
+  --accent: #008cba;
+  --text: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  background: var(--secondary);
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+}
+
+header {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+main.card {
+  background: white;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 91, 150, 0.1);
+}
+
+.instruction {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.prompt-box {
+  background: #e9f3fc;
+  padding: 1rem;
+  border-left: 5px solid var(--primary);
+  font-weight: bold;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+button {
+  width: 100%;
+  background-color: var(--accent);
+  color: white;
+  padding: 0.9rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background-color: #0071a8;
+}
+
+.result-box {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+  padding: 1rem;
+}
