@@ -32,7 +32,7 @@ function pickSentence(lang) {
 function changeLanguage() {
   currentLang = document.getElementById("language").value;
 
-  // Reset UI
+  // Update UI text
   document.getElementById("typingArea").value = "";
   document.getElementById("output").innerText = "";
 
@@ -63,8 +63,6 @@ textarea.addEventListener("keydown", (event) => {
 
 function submitData() {
   const typed = textarea.value.trim();
-  const output = document.getElementById("output");
-
   if (typed !== currentData.sentence.trim()) {
     alert(currentLang === "th"
       ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
@@ -89,7 +87,8 @@ function submitData() {
   })
     .then(res => res.json())
     .then(data => {
-      output.innerText = `${data.result}`;
+      const output = document.getElementById("output");
+      output.innerText = `${data.result} (RMSE: ${data.rmse})`;
 
       if (data.result.includes("Risk") || data.result.includes("เสี่ยง")) {
         output.style.color = "red";
