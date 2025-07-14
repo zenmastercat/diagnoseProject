@@ -1,116 +1,39 @@
-const sentenceData = {
-  en: [
-    {
-      sentence: "The quick brown fox jumps over the lazy dog",
-      normal: [120, 130, 115, 122, 110, 128, 123, 119, 126, 112, 124, 117, 115, 113, 122, 125, 118, 120, 123, 124, 119, 121, 122, 124, 127, 125, 124, 123, 122, 118]
-    },
-    {
-      sentence: "She sells seashells by the seashore",
-      normal: [130, 122, 125, 132, 128, 126, 124, 127, 129, 122, 125, 124, 123, 128, 130, 126, 125, 123, 122, 120, 118, 124, 126, 125, 124, 122, 124, 123, 121, 120]
-    }
-  ],
-  th: [
-    {
-      sentence: "กระต่ายกินแครอทและกระโดดผ่านต้นไม้",
-      normal: [135, 128, 130, 133, 127, 129, 132, 128, 131, 125, 124, 122, 120, 118, 124, 128, 129, 127, 125, 124, 126, 124, 123, 122, 121, 125, 128, 124, 122, 120]
-    },
-    {
-      sentence: "วันนี้อากาศดีมากเหมาะกับการเดินเล่นในสวน",
-      normal: [140, 135, 130, 125, 130, 133, 128, 132, 130, 125, 128, 127, 130, 135, 129, 126, 124, 125, 123, 122, 121, 120, 124, 122, 123, 124, 127, 130, 129, 128]
-    }
-  ]
-};
+const sentences = [
+  { text: "The doctor asked the patient to raise both arms.", normalTime: 4.5 },
+  { text: "Please type this sentence as quickly as you can.", normalTime: 5.0 },
+  { text: "I can smell the rain before it even begins to fall.", normalTime: 4.2 },
+  { text: "การพิมพ์ข้อความนี้ให้รวดเร็วและถูกต้อง", normalTime: 6.5 }, // Thai
+  { text: "วันนี้อากาศดีมาก อย่าลืมออกกำลังกาย", normalTime: 6.0 } // Thai
+];
 
-let currentLang = "en";
-let currentData = null;
+let selected = sentences[Math.floor(Math.random() * sentences.length)];
+document.getElementById("prompt").innerText = selected.text;
 
-function pickSentence(lang) {
-  const options = sentenceData[lang];
-  return options[Math.floor(Math.random() * options.length)];
-}
+let startTime = Date.now();
 
-function changeLanguage() {
-  currentLang = document.getElementById("language").value;
+function analyze() {
+  const input = document.getElementById("userInput").value.trim();
+  const output = document.getElementById("output");
 
-  // Update UI text
-  document.getElementById("typingArea").value = "";
-  document.getElementById("output").innerText = "";
-
-  document.getElementById("instruction").innerText = currentLang === "th"
-    ? "พิมพ์ประโยคต่อไปนี้:"
-    : "Type the following sentence:";
-  document.getElementById("analyzeBtn").innerText = currentLang === "th"
-    ? "วิเคราะห์"
-    : "Analyze";
-
-  // Pick a new sentence
-  currentData = pickSentence(currentLang);
-  document.getElementById("targetSentence").innerText = currentData.sentence;
-}
-
-// Typing logic
-let timings = [];
-let lastTime = null;
-const textarea = document.getElementById("typingArea");
-
-textarea.addEventListener("keydown", (event) => {
-  const currentTime = performance.now();
-  if (lastTime !== null) {
-    timings.push(currentTime - lastTime);
-  }
-  lastTime = currentTime;
-});
-
-function submitData() {
-  const typed = textarea.value.trim();
-  if (typed !== currentData.sentence.trim()) {
-    alert(currentLang === "th"
-      ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
-      : "❌ Your typed sentence doesn't match the prompt exactly.");
+  if (input !== selected.text) {
+    output.innerText = "❌ Incorrect typing. Please try again.";
     return;
   }
 
-  if (timings.length < 5) {
-    alert(currentLang === "th"
-      ? "⚠️ กรุณาพิมพ์ประโยคให้ครบก่อนวิเคราะห์"
-      : "⚠️ Please type the full sentence before analyzing.");
-    return;
-  }
+  let duration = (Date.now() - startTime) / 1000; // seconds
+  let features = Array(30).fill(duration); // simulated features
 
   fetch("/predict", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      features: timings,
-      baseline: currentData.normal
-    })
+    body: JSON.stringify({ features })
   })
-    .then(res => res.json())
-    .then(data => {
-      const output = document.getElementById("output");
-      output.innerText = `${data.result} (RMSE: ${data.rmse})`;
-
-      if (data.result.includes("Risk") || data.result.includes("เสี่ยง")) {
-        output.style.color = "red";
-        alert(data.result);
-      } else if (data.result.includes("deviation")) {
-        output.style.color = "orange";
-      } else {
-        output.style.color = "green";
-      }
-
-      // Reset
-      timings = [];
-      lastTime = null;
-      textarea.value = "";
-      currentData = pickSentence(currentLang);
-      document.getElementById("targetSentence").innerText = currentData.sentence;
-    })
-    .catch(err => {
-      console.error("Error:", err);
-      alert("Something went wrong.");
-    });
+  .then(res => res.json())
+  .then(data => {
+    output.innerText = `✅ Result: ${data.result}`;
+  })
+  .catch(err => {
+    output.innerText = "⚠️ Error contacting server.";
+    console.error(err);
+  });
 }
-
-// Initialize on load
-window.onload = changeLanguage;
