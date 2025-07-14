@@ -37,6 +37,20 @@ header p {
 }
 
 main.card {
+  .lang-select {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-select select {
+  padding: 0.4rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
   background: white;
   max-width: 600px;
   margin: 2rem auto;
