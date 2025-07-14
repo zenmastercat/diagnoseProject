@@ -24,7 +24,7 @@ def predict():
     baseline = fix_length(baseline)
 
     rmse = np.sqrt(np.mean((features - baseline) ** 2))
-    print("RMSE:", rmse)
+    
 
     if rmse < 450:
         return jsonify({
