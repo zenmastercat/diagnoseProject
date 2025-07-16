@@ -24,17 +24,17 @@ def predict():
     baseline = fix_length(baseline)
 
     rmse = np.sqrt(np.mean((features - baseline) ** 2))
-    
+    print("RMSE:", rmse)
 
     if rmse < 450:
         return jsonify({
             "result": "✅ Normal Typing Pattern",
-            
+            "rmse": round(rmse, 2)
         })
     else:
         return jsonify({
             "result": "⚠️ Possible Parkinson's Risk",
-           
+            "rmse": round(rmse, 2)
         })
 
 
