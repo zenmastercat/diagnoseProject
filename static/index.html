@@ -3,258 +3,268 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parkinson's Typing Detection</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Parkinson's Typing Analysis</title>
     <style>
-        :root {
-            --primary-color: #0077b6;
-            --primary-dark: #005f8c;
-            --success-color: #2a9d8f;
-            --warning-color: #e76f51;
-            --light-bg: rgba(255, 255, 255, 0.96);
-            --text-dark: #222;
-            --text-light: #444;
-        }
-
-        html {
-            box-sizing: border-box;
-        }
-        *, *::before, *::after {
-            box-sizing: inherit;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
-            background-image: url('b39815bc-c478-474a-83b5-661c5ef6ce31.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        /* --- Overlay --- */
-        #introOverlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--light-bg);
-            z-index: 1000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px;
-            text-align: center;
-            transition: opacity 0.6s ease-out;
-        }
-        #introOverlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #introOverlay h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        #introOverlay p {
-            font-size: 1.2rem;
-            max-width: 650px;
-            color: var(--text-light);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
 
-        /* --- Main Content --- */
-        #mainContent {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 40px;
-            background-color: var(--light-bg);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
-        #mainContent.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary-color);
+
+        h1 {
             text-align: center;
+            color: #0077b6;
+            margin-bottom: 25px;
         }
+
+        #instruction {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0077b6;
+        }
+
         #targetSentence {
+            font-size: 1.2rem;
+            font-family: "Georgia", serif;
             font-style: italic;
             padding: 15px;
             background-color: #e9f5ff;
-            border-left: 4px solid var(--primary-color);
             border-radius: 8px;
-            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: center;
         }
 
-        /* --- Form Elements --- */
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
         .controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            margin-top: 15px;
+            gap: 15px;
         }
-        textarea {
-            width: 100%;
-            height: 140px;
-            padding: 15px;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
-        }
+
         select, button {
-            padding: 12px 28px;
+            padding: 12px 25px;
             font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
             border-radius: 8px;
             border: none;
-            background-color: var(--primary-color);
-            color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            background-color: #0077b6;
+            color: white;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
-        button:hover:not(:disabled), select:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 95, 140, 0.3);
+
+        button#analyzeBtn {
+            flex-grow: 1; /* Make button take more space */
         }
-        button:disabled {
-            background-color: #a9a9a9;
-            cursor: not-allowed;
+        
+        select:hover, button:hover {
+            background-color: #005f8c;
         }
 
         #output {
-            margin-top: 10px;
-            font-weight: 600;
+            margin-top: 25px;
+            font-weight: bold;
             text-align: center;
-            font-size: 1.1rem;
-            padding: 12px;
+            font-size: 1.2rem;
+            padding: 15px;
             border-radius: 8px;
-            min-height: 50px;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-        .output-info { background-color: #e9f5ff; color: var(--primary-dark); }
-        .output-warn { background-color: #feedeb; color: var(--warning-color); }
-        .output-success { background-color: #eaf6f5; color: var(--success-color); }
-
-        /* --- Responsive --- */
-        @media (max-width: 600px) {
-            #introOverlay h1 { font-size: 2rem; }
-            #introOverlay p { font-size: 1rem; }
-            #mainContent { margin: 30px 15px; padding: 25px; }
-            .controls { flex-direction: column; align-items: stretch; text-align: center; }
+            min-height: 2rem;
         }
     </style>
 </head>
 <body>
 
-    <div id="introOverlay">
-        <h1>Welcome to Parkinson's Typing Detection</h1>
-        <p>
-            This medical tool analyzes your typing behavior to help detect early signs of Parkinson’s disease.
-            Please follow the instructions carefully and type the sample sentence as naturally as possible.
-        </p>
-        <button id="enterButton">I Understand</button>
-    </div>
+    <div class="container">
+        <h1>Typing Pattern Analysis</h1>
 
-    <div id="mainContent">
-        <h2 id="instruction">Type the following sentence:</h2>
-        
-        <p id="targetSentence"></p>
-        
+        <p id="instruction">Type the following sentence:</p>
+        <p id="targetSentence">Loading sentence...</p>
+
         <textarea id="typingArea" placeholder="Start typing here..."></textarea>
-        
+
         <div class="controls">
-            <select id="language">
+            <select id="language" onchange="changeLanguage()">
                 <option value="en">English</option>
                 <option value="th">ภาษาไทย</option>
             </select>
-            <button id="analyzeButton">Analyze</button>
+            <button id="analyzeBtn" onclick="submitData()">Analyze</button>
         </div>
-        
+
         <p id="output"></p>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Cache DOM elements for performance ---
-            const introOverlay = document.getElementById('introOverlay');
-            const mainContent = document.getElementById('mainContent');
-            const enterButton = document.getElementById('enterButton');
-            const languageSelect = document.getElementById('language');
-            const targetSentenceEl = document.getElementById('targetSentence');
-            const typingArea = document.getElementById('typingArea');
-            const analyzeButton = document.getElementById('analyzeButton');
-            const outputEl = document.getElementById('output');
+        // Paste the entire JavaScript code you provided here
+        const sentenceData = {
+          en: [
+            {
+              sentence: "The quick brown fox jumps over the lazy dog",
+              normal: [120, 130, 115, 122, 110, 128, 123, 119, 126, 112, 124, 117, 115, 113, 122, 125, 118, 120, 123, 124, 119, 121, 122, 124, 127, 125, 124, 123, 122, 118]
+            },
+            {
+              sentence: "She sells seashells by the seashore",
+              normal: [130, 122, 125, 132, 128, 126, 124, 127, 129, 122, 125, 124, 123, 128, 130, 126, 125, 123, 122, 120, 118, 124, 126, 125, 124, 122, 124, 123, 121, 120]
+            }
+          ],
+          th: [
+            {
+              sentence: "กระต่ายกินแครอทและกระโดดผ่านต้นไม้",
+              normal: [135, 128, 130, 133, 127, 129, 132, 128, 131, 125, 124, 122, 120, 118, 124, 128, 129, 127, 125, 124, 126, 124, 123, 122, 121, 125, 128, 124, 122, 120]
+            },
+            {
+              sentence: "วันนี้อากาศดีมากเหมาะกับการเดินเล่นในสวน",
+              normal: [140, 135, 130, 125, 130, 133, 128, 132, 130, 125, 128, 127, 130, 135, 129, 126, 124, 125, 123, 122, 121, 120, 124, 122, 123, 124, 127, 130, 129, 128]
+            }
+          ]
+        };
 
-            const sentences = {
-                en: "The quick brown fox jumps over the lazy dog.",
-                th: "ในน้ำมีปลา ในนามีข้าว" // Changed to a classic Thai pangram
-            };
+        let currentLang = "en";
+        let currentData = null;
 
-            const showSentence = (lang) => {
-                targetSentenceEl.textContent = sentences[lang] || sentences.en;
-            };
+        function pickSentence(lang) {
+          const options = sentenceData[lang];
+          return options[Math.floor(Math.random() * options.length)];
+        }
 
-            const enterSite = () => {
-                introOverlay.classList.add('hidden');
-                setTimeout(() => {
-                    mainContent.classList.add('visible');
-                }, 300); // A little delay for a smoother transition
-            };
+        function changeLanguage() {
+          currentLang = document.getElementById("language").value;
 
-            const submitData = () => {
-                const text = typingArea.value.trim();
-                outputEl.className = 'output-warn'; // Reset class and set to warning
-                
-                if (text.length < 15) {
-                    outputEl.textContent = "⚠️ Please type a bit more to get an accurate analysis.";
-                    return;
-                }
+          // Update UI text
+          document.getElementById("typingArea").value = "";
+          document.getElementById("output").innerText = "";
 
-                outputEl.className = 'output-info';
-                outputEl.textContent = "⏳ Analyzing your typing pattern...";
-                analyzeButton.disabled = true;
+          document.getElementById("instruction").innerText = currentLang === "th"
+            ? "พิมพ์ประโยคต่อไปนี้:"
+            : "Type the following sentence:";
+          document.getElementById("analyzeBtn").innerText = currentLang === "th"
+            ? "วิเคราะห์"
+            : "Analyze";
 
-                setTimeout(() => {
-                    outputEl.className = 'output-success';
-                    outputEl.textContent = "✅ Analysis complete. (This is a demo feature)";
-                    analyzeButton.disabled = false;
-                }, 2000); // Simulate network and analysis delay
-            };
+          // Pick a new sentence
+          currentData = pickSentence(currentLang);
+          document.getElementById("targetSentence").innerText = currentData.sentence;
+        }
 
-            // --- Event Listeners ---
-            enterButton.addEventListener('click', enterSite);
-            languageSelect.addEventListener('change', () => showSentence(languageSelect.value));
-            analyzeButton.addEventListener('click', submitData);
+        // Typing logic
+        let timings = [];
+        let lastTime = null;
+        const textarea = document.getElementById("typingArea");
 
-            // --- Initial Setup ---
-            showSentence(languageSelect.value); // Set initial sentence on load
+        textarea.addEventListener("keydown", (event) => {
+          const currentTime = performance.now();
+          if (lastTime !== null) {
+            timings.push(currentTime - lastTime);
+          }
+          lastTime = currentTime;
         });
+
+        function submitData() {
+          const typed = textarea.value.trim();
+          if (typed !== currentData.sentence.trim()) {
+            alert(currentLang === "th"
+              ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
+              : "❌ Your typed sentence doesn't match the prompt exactly.");
+            return;
+          }
+
+          if (timings.length < 5) {
+            alert(currentLang === "th"
+              ? "⚠️ กรุณาพิมพ์ประโยคให้ครบก่อนวิเคราะห์"
+              : "⚠️ Please type the full sentence before analyzing.");
+            return;
+          }
+
+          // This is a placeholder for the fetch call as we don't have a backend.
+          // In a real scenario, the fetch() code would run here.
+          // For now, we will simulate a response.
+          console.log("Submitting data:", {
+            features: timings,
+            baseline: currentData.normal
+          });
+          
+          const output = document.getElementById("output");
+          output.innerText = "Simulating analysis... (See console for data)";
+          output.style.color = "blue";
+          
+          setTimeout(() => {
+              alert("Analysis complete (simulation). Check the console for the submitted data. The real version would connect to a server.");
+              // Reset for next round
+              timings = [];
+              lastTime = null;
+              changeLanguage(); // Get a new sentence
+          }, 1000);
+
+
+          /*
+          // ORIGINAL FETCH CODE - requires a backend server at /predict
+          fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              features: timings,
+              baseline: currentData.normal
+            })
+          })
+            .then(res => res.json())
+            .then(data => {
+              const output = document.getElementById("output");
+              output.innerText = `${data.result} (RMSE: ${data.rmse})`;
+
+              if (data.result.includes("Risk") || data.result.includes("เสี่ยง")) {
+                output.style.color = "red";
+                alert(data.result);
+              } else if (data.result.includes("deviation")) {
+                output.style.color = "orange";
+              } else {
+                output.style.color = "green";
+              }
+
+              // Reset
+              timings = [];
+              lastTime = null;
+              textarea.value = "";
+              currentData = pickSentence(currentLang);
+              document.getElementById("targetSentence").innerText = currentData.sentence;
+            })
+            .catch(err => {
+              console.error("Error:", err);
+              alert("Something went wrong.");
+            });
+          */
+        }
+
+        // Initialize on load
+        window.onload = changeLanguage;
     </script>
+
 </body>
 </html>
