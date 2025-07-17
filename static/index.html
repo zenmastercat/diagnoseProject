@@ -145,31 +145,7 @@
     <p id="output"></p>
   </div>
 
-  <script>
-    function enterSite() {
-      document.getElementById("introOverlay").style.display = "none";
-      document.getElementById("mainContent").style.display = "block";
-    }
-
-    function changeLanguage() {
-      const lang = document.getElementById("language").value;
-      const instruction = document.getElementById("instruction");
-      const target = document.getElementById("targetSentence");
-
-      if (lang === "th") {
-        instruction.innerText = "พิมพ์ประโยคต่อไปนี้:";
-        target.innerText = "หมอพบว่าผู้ป่วยเริ่มมีอาการสั่นในมือข้างขวา";
-      } else {
-        instruction.innerText = "Type the following sentence:";
-        target.innerText = "The doctor observed a slight tremor in the patient’s right hand.";
-      }
-    }
-
-    window.onload = changeLanguage;
-
-    function submitData() {
-      document.getElementById("output").innerText = "Analyzing... (This is where your backend will respond)";
-    }
-  </script>
+  
+  <script src="/static/script.js"></script>
 </body>
 </html>
