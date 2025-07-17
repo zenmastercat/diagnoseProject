@@ -112,5 +112,15 @@ function submitData() {
     });
 }
 
+// Intro overlay control
+function enterSite() {
+  document.getElementById("introOverlay").style.display = "none";
+  document.getElementById("mainContainer").style.display = "block";
+}
+
 // Initialize on load
-window.onload = changeLanguage;
+window.onload = () => {
+  changeLanguage();
+  document.getElementById("mainContainer").style.display = "none";
+  document.getElementById("introOverlay").style.display = "flex";
+};
