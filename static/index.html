@@ -20,6 +20,8 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(0, 90, 120, 0.1);
+      z-index: 1;
+      position: relative;
     }
 
     h2 {
@@ -92,13 +94,63 @@
         width: auto;
       }
     }
+
+    /* Intro Overlay */
+    #introOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    #introOverlay h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #005b96;
+    }
+
+    #introOverlay p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    #introOverlay button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #introOverlay button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Intro Overlay -->
+  <div id="introOverlay">
+    <h1>Welcome to Parkinson's Typing Test</h1>
+    <p>This tool helps analyze typing patterns to assist in early detection of Parkinson’s disease. Please follow the instruction to type the given sentence and press Analyze.</p>
+    <button onclick="enterSite()">I Understand</button>
+  </div>
+
+  <!-- Main Site Container -->
+  <div class="container" id="mainContainer" style="display: none;">
     <h2 id="instruction">Type the following sentence:</h2>
 
-    <!-- Language Selector -->
     <label for="language" style="font-weight: bold;">Language:</label>
     <select id="language" onchange="changeLanguage()">
       <option value="en">English</option>
@@ -112,6 +164,7 @@
     <p id="output"></p>
   </div>
 
-  <script src="/static/script.js"></script>
+  <!-- Make sure this links correctly to your script -->
+  <script src="script.js"></script>
 </body>
 </html>
