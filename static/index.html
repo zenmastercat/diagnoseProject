@@ -1,270 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parkinson's Typing Analysis</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parkinson's Detection</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #eef4f8;
+      color: #333;
+      margin: 0;
+      padding: 2rem 1rem;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 700px;
-            background-color: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      max-width: 600px;
+      background: #ffffff;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 90, 120, 0.1);
+    }
 
-        h1 {
-            text-align: center;
-            color: #0077b6;
-            margin-bottom: 25px;
-        }
+    h2 {
+      color: #005b96;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
 
-        #instruction {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #0077b6;
-        }
+    select {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
 
-        #targetSentence {
-            font-size: 1.2rem;
-            font-family: "Georgia", serif;
-            font-style: italic;
-            padding: 15px;
-            background-color: #e9f5ff;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            text-align: center;
-        }
+    #targetSentence {
+      font-style: italic;
+      padding: 0.8rem;
+      background: #f1f9ff;
+      border-left: 5px solid #0077cc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
 
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 12px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            box-sizing: border-box;
-        }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      box-sizing: border-box;
+      background: #fdfdfd;
+    }
 
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            gap: 15px;
-        }
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
 
-        select, button {
-            padding: 12px 25px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background-color: #0077b6;
-            color: white;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
+    button:hover {
+      background-color: #005fa3;
+    }
 
-        button#analyzeBtn {
-            flex-grow: 1; /* Make button take more space */
-        }
-        
-        select:hover, button:hover {
-            background-color: #005f8c;
-        }
+    #output {
+      margin-top: 20px;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: center;
+      border-radius: 8px;
+    }
 
-        #output {
-            margin-top: 25px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.2rem;
-            padding: 15px;
-            border-radius: 8px;
-            min-height: 2rem;
-        }
-    </style>
+    @media (min-width: 600px) {
+      .container {
+        padding: 2.5rem;
+      }
+
+      button {
+        width: auto;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h2 id="instruction">Type the following sentence:</h2>
 
-    <div class="container">
-        <h1>Typing Pattern Analysis</h1>
+    <!-- Language Selector -->
+    <label for="language" style="font-weight: bold;">Language:</label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="th">ภาษาไทย</option>
+    </select>
 
-        <p id="instruction">Type the following sentence:</p>
-        <p id="targetSentence">Loading sentence...</p>
+    <p id="targetSentence"></p>
 
-        <textarea id="typingArea" placeholder="Start typing here..."></textarea>
+    <textarea id="typingArea" placeholder="Start typing here..."></textarea><br />
+    <button onclick="submitData()" id="analyzeBtn">Analyze</button>
+    <p id="output"></p>
+  </div>
 
-        <div class="controls">
-            <select id="language" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="th">ภาษาไทย</option>
-            </select>
-            <button id="analyzeBtn" onclick="submitData()">Analyze</button>
-        </div>
-
-        <p id="output"></p>
-    </div>
-
-    <script>
-        // Paste the entire JavaScript code you provided here
-        const sentenceData = {
-          en: [
-            {
-              sentence: "The quick brown fox jumps over the lazy dog",
-              normal: [120, 130, 115, 122, 110, 128, 123, 119, 126, 112, 124, 117, 115, 113, 122, 125, 118, 120, 123, 124, 119, 121, 122, 124, 127, 125, 124, 123, 122, 118]
-            },
-            {
-              sentence: "She sells seashells by the seashore",
-              normal: [130, 122, 125, 132, 128, 126, 124, 127, 129, 122, 125, 124, 123, 128, 130, 126, 125, 123, 122, 120, 118, 124, 126, 125, 124, 122, 124, 123, 121, 120]
-            }
-          ],
-          th: [
-            {
-              sentence: "กระต่ายกินแครอทและกระโดดผ่านต้นไม้",
-              normal: [135, 128, 130, 133, 127, 129, 132, 128, 131, 125, 124, 122, 120, 118, 124, 128, 129, 127, 125, 124, 126, 124, 123, 122, 121, 125, 128, 124, 122, 120]
-            },
-            {
-              sentence: "วันนี้อากาศดีมากเหมาะกับการเดินเล่นในสวน",
-              normal: [140, 135, 130, 125, 130, 133, 128, 132, 130, 125, 128, 127, 130, 135, 129, 126, 124, 125, 123, 122, 121, 120, 124, 122, 123, 124, 127, 130, 129, 128]
-            }
-          ]
-        };
-
-        let currentLang = "en";
-        let currentData = null;
-
-        function pickSentence(lang) {
-          const options = sentenceData[lang];
-          return options[Math.floor(Math.random() * options.length)];
-        }
-
-        function changeLanguage() {
-          currentLang = document.getElementById("language").value;
-
-          // Update UI text
-          document.getElementById("typingArea").value = "";
-          document.getElementById("output").innerText = "";
-
-          document.getElementById("instruction").innerText = currentLang === "th"
-            ? "พิมพ์ประโยคต่อไปนี้:"
-            : "Type the following sentence:";
-          document.getElementById("analyzeBtn").innerText = currentLang === "th"
-            ? "วิเคราะห์"
-            : "Analyze";
-
-          // Pick a new sentence
-          currentData = pickSentence(currentLang);
-          document.getElementById("targetSentence").innerText = currentData.sentence;
-        }
-
-        // Typing logic
-        let timings = [];
-        let lastTime = null;
-        const textarea = document.getElementById("typingArea");
-
-        textarea.addEventListener("keydown", (event) => {
-          const currentTime = performance.now();
-          if (lastTime !== null) {
-            timings.push(currentTime - lastTime);
-          }
-          lastTime = currentTime;
-        });
-
-        function submitData() {
-          const typed = textarea.value.trim();
-          if (typed !== currentData.sentence.trim()) {
-            alert(currentLang === "th"
-              ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
-              : "❌ Your typed sentence doesn't match the prompt exactly.");
-            return;
-          }
-
-          if (timings.length < 5) {
-            alert(currentLang === "th"
-              ? "⚠️ กรุณาพิมพ์ประโยคให้ครบก่อนวิเคราะห์"
-              : "⚠️ Please type the full sentence before analyzing.");
-            return;
-          }
-
-          // This is a placeholder for the fetch call as we don't have a backend.
-          // In a real scenario, the fetch() code would run here.
-          // For now, we will simulate a response.
-          console.log("Submitting data:", {
-            features: timings,
-            baseline: currentData.normal
-          });
-          
-          const output = document.getElementById("output");
-          output.innerText = "Simulating analysis... (See console for data)";
-          output.style.color = "blue";
-          
-          setTimeout(() => {
-              alert("Analysis complete (simulation). Check the console for the submitted data. The real version would connect to a server.");
-              // Reset for next round
-              timings = [];
-              lastTime = null;
-              changeLanguage(); // Get a new sentence
-          }, 1000);
-
-
-          /*
-          // ORIGINAL FETCH CODE - requires a backend server at /predict
-          fetch("/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              features: timings,
-              baseline: currentData.normal
-            })
-          })
-            .then(res => res.json())
-            .then(data => {
-              const output = document.getElementById("output");
-              output.innerText = `${data.result} (RMSE: ${data.rmse})`;
-
-              if (data.result.includes("Risk") || data.result.includes("เสี่ยง")) {
-                output.style.color = "red";
-                alert(data.result);
-              } else if (data.result.includes("deviation")) {
-                output.style.color = "orange";
-              } else {
-                output.style.color = "green";
-              }
-
-              // Reset
-              timings = [];
-              lastTime = null;
-              textarea.value = "";
-              currentData = pickSentence(currentLang);
-              document.getElementById("targetSentence").innerText = currentData.sentence;
-            })
-            .catch(err => {
-              console.error("Error:", err);
-              alert("Something went wrong.");
-            });
-          */
-        }
-
-        // Initialize on load
-        window.onload = changeLanguage;
-    </script>
-
+  <script src="/static/script.js"></script>
 </body>
 </html>
