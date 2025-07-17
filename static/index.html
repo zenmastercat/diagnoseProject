@@ -1,151 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parkinson's Detection</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-image: url('b39815bc-c478-474a-83b5-661c5ef6ce31.jpg');
-      background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
-      color: #222;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parkinson's Typing Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --primary-dark: #005f8c;
+            --success-color: #2a9d8f;
+            --warning-color: #e76f51;
+            --light-bg: rgba(255, 255, 255, 0.96);
+            --text-dark: #222;
+            --text-light: #444;
+        }
 
-    #introOverlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
-      text-align: center;
-    }
+        html {
+            box-sizing: border-box;
+        }
+        *, *::before, *::after {
+            box-sizing: inherit;
+            margin: 0;
+            padding: 0;
+        }
 
-    #introOverlay h1 {
-      font-size: 2.5rem;
-      color: #0077b6;
-      margin-bottom: 20px;
-    }
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background-image: url('b39815bc-c478-474a-83b5-661c5ef6ce31.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    #introOverlay p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      color: #333;
-    }
+        /* --- Overlay --- */
+        #introOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--light-bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            transition: opacity 0.6s ease-out;
+        }
+        #introOverlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #introOverlay h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        #introOverlay p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            color: var(--text-light);
+        }
 
-    #introOverlay button {
-      margin-top: 30px;
-      padding: 12px 28px;
-      font-size: 1rem;
-      border: none;
-      background-color: #0077b6;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        /* --- Main Content --- */
+        #mainContent {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: var(--light-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        #mainContent.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        #targetSentence {
+            font-style: italic;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            color: var(--text-light);
+        }
 
-    #introOverlay button:hover {
-      background-color: #005f8c;
-    }
+        /* --- Form Elements --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+        }
+        select, button {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        button:hover:not(:disabled), select:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 95, 140, 0.3);
+        }
+        button:disabled {
+            background-color: #a9a9a9;
+            cursor: not-allowed;
+        }
 
-    #mainContent {
-      display: none;
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 16px;
-      margin-top: 40px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
+        #output {
+            margin-top: 10px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 12px;
+            border-radius: 8px;
+            min-height: 50px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        .output-info { background-color: #e9f5ff; color: var(--primary-dark); }
+        .output-warn { background-color: #feedeb; color: var(--warning-color); }
+        .output-success { background-color: #eaf6f5; color: var(--success-color); }
 
-    h2 {
-      color: #0077b6;
-    }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      resize: none;
-      margin-top: 10px;
-      box-sizing: border-box;
-    }
-
-    select, button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      background-color: #0077b6;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #005f8c;
-    }
-
-    #output {
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1.1rem;
-    }
-
-    @media (max-width: 600px) {
-      #introOverlay h1 {
-        font-size: 1.8rem;
-      }
-      #introOverlay p {
-        font-size: 1rem;
-      }
-    }
-  </style>
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            #introOverlay h1 { font-size: 2rem; }
+            #introOverlay p { font-size: 1rem; }
+            #mainContent { margin: 30px 15px; padding: 25px; }
+            .controls { flex-direction: column; align-items: stretch; text-align: center; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Intro overlay -->
-  <div id="introOverlay">
-    <h1>Welcome to Parkinson's Typing Detection</h1>
-    <p>
-      This medical tool analyzes your typing behavior to help detect early signs of Parkinson’s disease.
-      Please follow the instructions carefully and type the sample sentence as naturally as possible.
-    </p>
-    <button onclick="enterSite()">I Understand</button>
-  </div>
+    <div id="introOverlay">
+        <h1>Welcome to Parkinson's Typing Detection</h1>
+        <p>
+            This medical tool analyzes your typing behavior to help detect early signs of Parkinson’s disease.
+            Please follow the instructions carefully and type the sample sentence as naturally as possible.
+        </p>
+        <button id="enterButton">I Understand</button>
+    </div>
 
-  <!-- Main content -->
-  <div id="mainContent">
-    <h2 id="instruction">Type the following sentence:</h2>
+    <div id="mainContent">
+        <h2 id="instruction">Type the following sentence:</h2>
+        
+        <p id="targetSentence"></p>
+        
+        <textarea id="typingArea" placeholder="Start typing here..."></textarea>
+        
+        <div class="controls">
+            <select id="language">
+                <option value="en">English</option>
+                <option value="th">ภาษาไทย</option>
+            </select>
+            <button id="analyzeButton">Analyze</button>
+        </div>
+        
+        <p id="output"></p>
+    </div>
 
-    <select id="language" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="th">ภาษาไทย</option>
-    </select>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Cache DOM elements for performance ---
+            const introOverlay = document.getElementById('introOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const enterButton = document.getElementById('enterButton');
+            const languageSelect = document.getElementById('language');
+            const targetSentenceEl = document.getElementById('targetSentence');
+            const typingArea = document.getElementById('typingArea');
+            const analyzeButton = document.getElementById('analyzeButton');
+            const outputEl = document.getElementById('output');
 
-    <p id="targetSentence" style="font-style: italic; margin-top: 10px;"></p>
-    <textarea id="typingArea" placeholder="Start typing here..."></textarea><br />
-    <button onclick="submitData()">Analyze</button>
+            const sentences = {
+                en: "The quick brown fox jumps over the lazy dog.",
+                th: "ในน้ำมีปลา ในนามีข้าว" // Changed to a classic Thai pangram
+            };
 
-    <p id="output"></p>
-  </div>
+            const showSentence = (lang) => {
+                targetSentenceEl.textContent = sentences[lang] || sentences.en;
+            };
 
-  
-<script src="/static/script.js"></script>
+            const enterSite = () => {
+                introOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    mainContent.classList.add('visible');
+                }, 300); // A little delay for a smoother transition
+            };
+
+            const submitData = () => {
+                const text = typingArea.value.trim();
+                outputEl.className = 'output-warn'; // Reset class and set to warning
+                
+                if (text.length < 15) {
+                    outputEl.textContent = "⚠️ Please type a bit more to get an accurate analysis.";
+                    return;
+                }
+
+                outputEl.className = 'output-info';
+                outputEl.textContent = "⏳ Analyzing your typing pattern...";
+                analyzeButton.disabled = true;
+
+                setTimeout(() => {
+                    outputEl.className = 'output-success';
+                    outputEl.textContent = "✅ Analysis complete. (This is a demo feature)";
+                    analyzeButton.disabled = false;
+                }, 2000); // Simulate network and analysis delay
+            };
+
+            // --- Event Listeners ---
+            enterButton.addEventListener('click', enterSite);
+            languageSelect.addEventListener('change', () => showSentence(languageSelect.value));
+            analyzeButton.addEventListener('click', submitData);
+
+            // --- Initial Setup ---
+            showSentence(languageSelect.value); // Set initial sentence on load
+        });
+    </script>
 </body>
 </html>
