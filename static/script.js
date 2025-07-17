@@ -23,6 +23,8 @@ const sentenceData = {
 
 let currentLang = "en";
 let currentData = null;
+let timings = [];
+let lastTime = null;
 
 function pickSentence(lang) {
   const options = sentenceData[lang];
@@ -31,49 +33,38 @@ function pickSentence(lang) {
 
 function changeLanguage() {
   currentLang = document.getElementById("language").value;
-
-  // Update UI text
   document.getElementById("typingArea").value = "";
   document.getElementById("output").innerText = "";
 
-  document.getElementById("instruction").innerText = currentLang === "th"
-    ? "พิมพ์ประโยคต่อไปนี้:"
-    : "Type the following sentence:";
-  document.getElementById("analyzeBtn").innerText = currentLang === "th"
-    ? "วิเคราะห์"
-    : "Analyze";
+  document.getElementById("instruction").innerText =
+    currentLang === "th" ? "พิมพ์ประโยคต่อไปนี้:" : "Type the following sentence:";
 
-  // Pick a new sentence
+  document.getElementById("analyzeBtn").innerText =
+    currentLang === "th" ? "วิเคราะห์" : "Analyze";
+
   currentData = pickSentence(currentLang);
   document.getElementById("targetSentence").innerText = currentData.sentence;
 }
 
-// Typing logic
-let timings = [];
-let lastTime = null;
-const textarea = document.getElementById("typingArea");
-
-textarea.addEventListener("keydown", (event) => {
-  const currentTime = performance.now();
-  if (lastTime !== null) {
-    timings.push(currentTime - lastTime);
-  }
-  lastTime = currentTime;
-});
-
 function submitData() {
+  const textarea = document.getElementById("typingArea");
   const typed = textarea.value.trim();
+
   if (typed !== currentData.sentence.trim()) {
-    alert(currentLang === "th"
-      ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
-      : "❌ Your typed sentence doesn't match the prompt exactly.");
+    alert(
+      currentLang === "th"
+        ? "❌ คุณพิมพ์ไม่ตรงกับประโยค กรุณาลองใหม่อีกครั้ง"
+        : "❌ Your typed sentence doesn't match the prompt exactly."
+    );
     return;
   }
 
   if (timings.length < 5) {
-    alert(currentLang === "th"
-      ? "⚠️ กรุณาพิมพ์ประโยคให้ครบก่อนวิเคราะห์"
-      : "⚠️ Please type the full sentence before analyzing.");
+    alert(
+      currentLang === "th"
+        ? "⚠️ กรุณาพิมพ์ประโยคให้ครบก่อนวิเคราะห์"
+        : "⚠️ Please type the full sentence before analyzing."
+    );
     return;
   }
 
@@ -85,8 +76,8 @@ function submitData() {
       baseline: currentData.normal
     })
   })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       const output = document.getElementById("output");
       output.innerText = `${data.result} (RMSE: ${data.rmse})`;
 
@@ -106,21 +97,30 @@ function submitData() {
       currentData = pickSentence(currentLang);
       document.getElementById("targetSentence").innerText = currentData.sentence;
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("Error:", err);
       alert("Something went wrong.");
     });
 }
 
-// Intro overlay control
 function enterSite() {
   document.getElementById("introOverlay").style.display = "none";
   document.getElementById("mainContainer").style.display = "block";
 }
 
-// Initialize on load
 window.onload = () => {
   changeLanguage();
+
+  const textarea = document.getElementById("typingArea");
+  textarea.addEventListener("keydown", (event) => {
+    const currentTime = performance.now();
+    if (lastTime !== null) {
+      timings.push(currentTime - lastTime);
+    }
+    lastTime = currentTime;
+  });
+
+  // Make sure overlay is shown initially
   document.getElementById("mainContainer").style.display = "none";
   document.getElementById("introOverlay").style.display = "flex";
 };
