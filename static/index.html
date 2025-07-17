@@ -6,59 +6,40 @@
   <title>Parkinson's Detection</title>
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #eef4f8;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 2rem 1rem;
+      background: #f0f4f8;
+      color: #333;
     }
 
-    .container {
+    /* INTRO OVERLAY */
+    #introOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #introOverlay h1 {
+      font-size: 2rem;
+      color: #007BFF;
+      margin-bottom: 15px;
+    }
+
+    #introOverlay p {
+      font-size: 1.1rem;
       max-width: 600px;
-      background: #ffffff;
-      margin: auto;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 90, 120, 0.1);
     }
 
-    h2 {
-      color: #005b96;
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-    }
-
-    select {
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    #targetSentence {
-      font-style: italic;
-      padding: 0.8rem;
-      background: #f1f9ff;
-      border-left: 5px solid #0077cc;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      font-size: 1rem;
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      resize: none;
-      box-sizing: border-box;
-      background: #fdfdfd;
-    }
-
-    button {
-      margin-top: 15px;
+    #introOverlay button {
+      margin-top: 25px;
       padding: 12px 24px;
       font-size: 1rem;
       border: none;
@@ -66,52 +47,100 @@
       color: white;
       border-radius: 8px;
       cursor: pointer;
+    }
+
+    #mainContent {
+      display: none; /* Hidden initially */
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    textarea {
       width: 100%;
-      transition: background 0.2s;
+      height: 120px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      box-sizing: border-box;
+      font-size: 1rem;
     }
 
     button:hover {
-      background-color: #005fa3;
+      background-color: #0056b3;
     }
 
     #output {
       margin-top: 20px;
-      padding: 12px;
+      padding: 10px;
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 1.1em;
       text-align: center;
-      border-radius: 8px;
     }
 
-    @media (min-width: 600px) {
-      .container {
-        padding: 2.5rem;
-      }
-
-      button {
-        width: auto;
+    @media (max-width: 600px) {
+      #introOverlay h1 {
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <!-- Intro Overlay -->
+  <div id="introOverlay">
+    <h1>Welcome to Parkinson's Typing Detection</h1>
+    <p>
+      This tool helps analyze typing behavior to assist in early detection of Parkinson’s disease symptoms.
+      Please type the given sentence in the text area, and the system will provide feedback based on your typing pattern.
+    </p>
+    <button onclick="enterSite()">I Understand</button>
+  </div>
+
+  <!-- Main Website Content -->
+  <div id="mainContent">
     <h2 id="instruction">Type the following sentence:</h2>
 
     <!-- Language Selector -->
-    <label for="language" style="font-weight: bold;">Language:</label>
     <select id="language" onchange="changeLanguage()">
       <option value="en">English</option>
       <option value="th">ภาษาไทย</option>
     </select>
 
-    <p id="targetSentence"></p>
-
-    <textarea id="typingArea" placeholder="Start typing here..."></textarea><br />
+    <p id="targetSentence" style="font-style: italic;"></p>
+    <textarea id="typingArea" placeholder="Start typing here..."></textarea><br>
     <button onclick="submitData()" id="analyzeBtn">Analyze</button>
     <p id="output"></p>
   </div>
 
-  <script src="/static/script.js"></script>
+  <script>
+    function enterSite() {
+      document.getElementById("introOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    }
+
+    function changeLanguage() {
+      const lang = document.getElementById("language").value;
+      const instruction = document.getElementById("instruction");
+      const target = document.getElementById("targetSentence");
+
+      if (lang === "th") {
+        instruction.innerText = "พิมพ์ประโยคต่อไปนี้:";
+        target.innerText = "หมอพบว่าผู้ป่วยเริ่มมีอาการสั่นในมือข้างขวา";
+      } else {
+        instruction.innerText = "Type the following sentence:";
+        target.innerText = "The doctor observed a slight tremor in the patient’s right hand.";
+      }
+    }
+
+    // Default to English on load
+    window.onload = changeLanguage;
+
+    function submitData() {
+      const output = document.getElementById("output");
+      output.innerText = "Analyzing... (This would call your backend AI)";
+    }
+  </script>
 </body>
 </html>
